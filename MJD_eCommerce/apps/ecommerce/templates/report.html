@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>财务统计</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/boss/{{thisBoss.id}}">{{thisBoss.bossName}}: 财务统计 </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="card">
+            <div class="row">
+                <div class="col">
+                    <div class="card-header">
+                        <h4>网站数据统计</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p>注册用户数量: {{userCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>管理员数量: {{bossCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>上架商品数量: {{productCount}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="row">
+                <div class="col">
+                    <div class="card-header">
+                        <h4>财务数据统计</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p>总交易额: ￥{{totalSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>成交订单总数: {{saleCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>商品出售总量: {{soldItemCount}}</p>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>最大成交额: ￥{{maxSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>最小成交额: ￥{{minSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>平均成交额: ￥{{avgSale}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>24小时成交订单总数: {{dayTradeCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>24小时成交额: ￥{{daySale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>昨天成交额: ￥{{day2Sale}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>7日成交订单总数: {{weekTradeCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>7日成交额: ￥{{weekSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>上周成交额: ￥{{week2Sale}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>30日成交订单总数: {{monthTradeCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>30日成交额: ￥{{monthSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>上月成交额: ￥{{month2Sale}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>90日成交订单总数: {{seasonTradeCount}}</p>
+                            </div>
+                            <div class="col">
+                                <p>90日成交额: ￥{{seasonSale}}</p>
+                            </div>
+                            <div class="col">
+                                <p>上季成交额: ￥{{season2Sale}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    </div>
+
+</body>
+
+</html>

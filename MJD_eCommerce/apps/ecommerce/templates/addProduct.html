@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加新商品</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/boss/{{thisBoss.id}}">{{thisBoss.bossName}}: 添加新商品 </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <!-- 商品添加失败信息 -->
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+
+    <div class="container">
+        <h5>添加新商品：</h5>
+
+        <form action="/boss/add/product/{{thisBoss.id}}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">商品名称</span>
+                        </div>
+                        <input type="text" name="name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">零售价格</span>
+                        </div>
+                        <input type="text" name="price" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <div class="input-group-append">
+                            <span class="input-group-text">￥</span>
+                            <span class="input-group-text">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品颜色</span>
+                        </div>
+                        <input type="text" name="color" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品尺码</span>
+                        </div>
+                        <input type="text" name="size" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品上架数量</span>
+                        </div>
+                        <input type="text" name="quantity" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品简介</span>
+                        </div>
+                        <input type="text" name="description" class="form-control" aria-label="Default"
+                            aria-describedby="inputGroup-sizing-default">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品类别</span>
+                        </div>
+                        <input type="text" name="cate0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <input type="text" name="cate1" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <input type="text" name="cate2" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <input type="text" name="cate3" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传商品图片(封面图片)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img1" id="img1">
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传备用商品图片1(可不填)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img2" id="img2">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传备用商品图片2(可不填)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img3" id="img3">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传备用商品图片3(可不填)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img4" id="img4">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传备用商品图片4(可不填)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img5" id="img5">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">上传备用商品图片5(可不填)</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="img6" id="img6">
+                        </div>
+                    </div>
+                    <button class="btn btn-info">添加商品</button>
+                </div>
+
+        </form>
+    </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

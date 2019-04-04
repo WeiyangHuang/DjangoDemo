@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，选择付款方式</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <ul>
+            {% if messages %}
+            {% for m in messages %}
+            <li><h3 id="error">{{m}}</h3></li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+        {% for i in method %}
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <h3 class="card-title">支付总额: ￥{{total}}</h3>
+                    <img src="{{i.qrCode.url}}" class="card-img-top">
+                </div>
+            </div>
+            <div class='col-8'>
+                <h4>自助支付流程:</h4>
+                <ul>
+                    <li>1.选择您喜欢的支付方式</li>
+                    <li>2.确认金额是否正确</li>
+                    <li>3.用设备扫相应的支付二维码</li>
+                    <li>4.输入系统提示的支付总额</li>
+                    <li>5.在设备上确认支付</li>
+                    <li>6.设备收到支付平台发送的支付收据</li>
+                    <li>7.在支付收据中找到转账单号/支付单号</li>
+                    <li>8.在下面空框处输入单号后5位数</li>
+                    <li>9.成功完成支付后系统会生成您的订单并跳转到订单页面</li>
+                    <li>10.如有问题，请<a href="/user/service/{{thisUser.id}}">联系我们</a></li>
+                </ul>
+                <form action="/user/order/{{thisUser.id}}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{address}}" name="address">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">转账单号</span>
+                        </div>
+                        <input type="text" name="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="后5位">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">确认单号</span>
+                        </div>
+                        <input type="text" name="number_comform" class="form-control" aria-label="Default"
+                            aria-describedby="inputGroup-sizing-default" placeholder="请重复输入上面单号后5位">
+                    </div>
+                    <button class="btn btn-success" id="buy">完成支付</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+
+
+    </div>
+
+    <style>
+        #buy {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+
+        #login {
+            color: green;
+        }
+
+        #btn {
+            margin-top: 3%;
+        }
+        #error{
+            color:firebrick;
+        }
+    </style>
+</body>
+
+</html>

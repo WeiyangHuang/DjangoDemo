@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商城管理</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="">{{thisBoss.bossName}}: 商城管理 </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+
+    <div class="container">
+        <div class="row">
+            <div class='col-4'>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>管理广告信息:</h4>
+                    </div>
+                    <div class="card">
+                        <form action="/add/advert/{{thisBoss.id}}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">上传海报</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" name="img" id="img">
+                                </div>
+                            </div>
+                            <button class="btn btn-info">添加海报</button>
+                        </form>
+                    </div>
+                    <br>
+                    {% for i in ad %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <img src="{{i.ad.url}}" class="card-img-top">
+                            <br>
+                            <br>
+                            <button class="btn btn-danger"><a id="textcolor" href="/delete/ad/{{i.id}}/{{thisBoss.id}}">删除海报</a></button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class='col-4'>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>管理客服信息:</h4>
+                    </div>
+                    <div class="card">
+                        <form action="/add/service/{{thisBoss.id}}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">客服名称</span>
+                                </div>
+                                <input type="text" name="name" class="form-control" aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">上传客服二维码</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" name="img" id="img">
+                                </div>
+                            </div>
+                            <button class="btn btn-info">添加客服</button>
+                        </form>
+                    </div>
+                    <br>
+
+                    {% for i in server %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">客服名称: {{i.name}}</h5>
+                            <img src="{{i.qrCode.url}}" class="card-img-top">
+                            <br>
+                            <br>
+                            <button class="btn btn-danger"><a id="textcolor" href="/delete/service/{{i.id}}/{{thisBoss.id}}">删除名片</a></button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>收款二维码信息:</h4>
+                    </div>
+                    <div class="card">
+                        <form action="/add/payment/{{thisBoss.id}}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">输入密码</span>
+                                </div>
+                                <input type="password" name="password" class="form-control" aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default"><a href="/payment/password/{{thisBoss.id}}">
+                                            更改密码</a></span>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">上传收款二维码</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" name="img" id="img">
+                                </div>
+                            </div>
+                            <button class="btn btn-info">添加收款二维码</button>
+                        </form>
+                        <br>
+                    </div>
+                    {% for i in payment %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <img src="{{i.qrCode.url}}" class="card-img-top">
+                            <br>
+                            <br>
+                            {% if check %}
+                            <button class="btn btn-danger"><a id="textcolor" href="/delete/payment/{{i.id}}/{{thisBoss.id}}">删除收款二维码</a></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        #textcolor {
+            color: white;
+        }
+    </style>
+</body>
+
+</html>

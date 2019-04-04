@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商品详情</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/boss/{{thisBoss.id}}">{{thisBoss.bossName}}：{{product.name}} </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+    <div class="container">
+        <h4>商品详情：商家用户名（{{product.seller.bossName}}）</h4>
+        <form action="/boss/updateProduct/{{product.id}}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">商品名称</span>
+                        </div>
+                        <input type="text" name="name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{product.name}}">
+                    </div>
+
+                </div>
+
+                <div class="col-sm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">零售价格</span>
+                            <span class="input-group-text">￥</span>
+                        </div>
+                        <input type="text" name="price" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{product.price}}">
+
+                    </div>
+
+                </div>
+                <div class="col-sm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品颜色</span>
+                        </div>
+                        <input type="text" name="color" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{product.color}}">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品类别</span>
+                        </div>
+                        <input type="text" name="cate0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{cate1}}">
+                        <input type="text" name="cate1" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{cate2}}">
+                        <input type="text" name="cate2" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{cate3}}">
+                        <input type="text" name="cate3" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                            placeholder="{{cate4}}">
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">商品简介</span>
+                        </div>
+                        <input type="text" name="description" class="form-control" aria-label="Default"
+                            aria-describedby="inputGroup-sizing-default" placeholder="{{product.description}}">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <button class="btn btn-info" id="info">更新产品信息</button>
+                </div>
+            </div>
+        </form>
+
+        <br>
+
+        <h4>货存详情：</h4>
+
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title">添加新尺码：</h5>
+                <form action="/boss/addSize/{{product.id}}" method="POST" class="card-text">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">新增尺码</span>
+                                </div>
+                                <input type="text" name="size" class="form-control" aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">上架数量</span>
+                                </div>
+                                <input type="text" name="quantity" class="form-control" aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default">
+                                <button class="btn btn-info" id="info">确定上架</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        {% for i in detail %}
+
+        <div class="card w-50">
+            <div class="card-body">
+                <h5 class="card-title">商品尺码: {{i.size}}</h5>
+                <form action="/boss/updateQuantity/{{product.id}}/{{i.id}}" method="POST" class="card-text">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{i.size}}码货存数量</span>
+                                </div>
+                                <input type="text" name="quantity" class="form-control" aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default" placeholder="{{i.quantity}}">
+                                <button class="btn btn-info" id="info">更新货存</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-text">
+                    <button class="btn btn-danger"><a href="/boss/deleteSize/{{i.id}}" id="textcolor">删除尺码</a></button>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <br>
+
+        <h4>商品图片：</h4>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">封面图片:</p>
+                        <img src="{{product.img1.url}}" class="card-img-top">
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/1" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">可选备用图片1:</p>
+                        {% if not product.img2 %}
+                        <img src="" class="card-img-top">
+                        {% else %}
+                        <img src="{{product.img2.url}}" class="card-img-top">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/2" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteImage/{{product.id}}/2">删除图片</a></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">可选备用图片2:</p>
+                        {% if not product.img3 %}
+                        <img src="" class="card-img-top">
+                        {% else %}
+                        <img src="{{product.img3.url}}" class="card-img-top">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/3" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteImage/{{product.id}}/3">删除图片</a></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">可选备用图片3:</p>
+                        {% if not product.img4 %}
+                        <img src="" class="card-img-top">
+                        {% else %}
+                        <img src="{{product.img4.url}}" class="card-img-top">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/4" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteImage/{{product.id}}/4">删除图片</a></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">可选备用图片4:</p>
+                        {% if not product.img5 %}
+                        <img src="" class="card-img-top">
+                        {% else %}
+                        <img src="{{product.img5.url}}" class="card-img-top">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/5" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteImage/{{product.id}}/5">删除图片</a></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <p class="card-title">可选备用图片5:</p>
+                        {% if not product.img6 %}
+                        <img src="" class="card-img-top">
+                        {% else %}
+                        <img src="{{product.img6.url}}" class="card-img-top">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <form action="/boss/updateImage/{{product.id}}/6" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="img" id="img">
+                            <button class="btn btn-info" id="info">更换图片</button>
+                        </form>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteImage/{{product.id}}/6">删除图片</a></button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+    </div>
+    <style>
+        #info {
+            float: left;
+        }
+
+        #delete {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+    </style>
+</body>
+
+</html>

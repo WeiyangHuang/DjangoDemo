@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            {% for i in server %}
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">客服名称: {{i.name}}</h5>
+                        <img src="{{i.qrCode.url}}" class="card-img-top">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</body>
+
+</html>

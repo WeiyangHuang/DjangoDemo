@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达用户注册登陆</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <h1 class="font-italic">美嘉达网用户免费注册页面</h1>
+        <button class="btn btn-info">
+            <a id="goback" class="nav-link" href="/">返回商城</a>
+        </button>
+    </nav>
+
+    <div class="container">
+        <!-- 账户密码验证失败信息 -->
+        <ul>
+            {% if messages %}
+                {% for m in messages %}
+                    <li>{{m}}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+
+        <!-- 注册模块 -->
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <form action="/userReg" method="POST">
+                        {% csrf_token %}
+                        <h3 class="card-header">注册: </h3>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户姓名</span>
+                            </div>
+                            <input type="text" name="name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户账号</span>
+                            </div>
+                            <input type="text" name="account" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户手机</span>
+                            </div>
+                            <input type="text" name="phone" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">出生日期</span>
+                                </div>
+                                <input type="text" name="year" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="年">
+                                <input type="text" name="month" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="月">
+                                <input type="text" name="day" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="日">
+                                
+                            </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">创建密码</span>
+                            </div>
+                            <input type="password" name="password" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">确认密码</span>
+                            </div>
+                            <input type="password" name="password_comfirm" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+
+
+                        <button class="btn btn-info">注册</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- 登陆模块 -->
+            <div class="col-6">
+                <div class="card">
+                    <h3 class="card-header">登陆: </h3>
+                    <form action="/userLog" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户账号</span>
+                            </div>
+                            <input type="text" name="account" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" placeholder="或手机号">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">输入密码</span>
+                            </div>
+                            <input type="password" name="password" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <button class="btn btn-info">登陆</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #goback{
+            color:white;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>老板主页</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/boss/{{thisBoss.id}}">{{thisBoss.bossName}}: 管理员主页 </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+
+    <div class="container">
+        <h4>产品目录:</h4>
+        <div class="row">
+            {% for p in products %}
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">产品名称：{{p.name}}</h5>
+                        <p class="card-text">产品类别：{{p.category}}</p>
+                        <p class="card-text">产品颜色：{{p.color}}</p>
+                        <p class="card-text">零售价格：￥{{p.price}}</p>
+                        <img src="{{p.img1.url}}" class="card-img-top">
+                        <br>
+                        <br>
+                        <button class="btn btn-info" id="info"><a id="textcolor" href="/boss/product/detail/{{p.id}}/{{thisBoss.id}}">商品详情</a></button>
+                        <button class="btn btn-danger" id="delete"><a id="textcolor" href="/boss/deleteProduct/{{p.id}}/{{thisBoss.id}}">删除商品</a></button>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <style>
+        #info {
+            float: left;
+        }
+
+        #delete {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+    </style>
+</body>
+
+</html>

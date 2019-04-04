@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，添购商品{{product.name}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+    <div class="container">
+        <h3>商品详情:</h3>
+        <div class="row">
+
+            <div class="col-7">
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/1"><img class="card-img-top" src="{{product.img1.url}}"></a>
+                </div>
+
+                {% if product.img2 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/2"><img class="card-img-top" src="{{product.img2.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img3 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/3"><img class="card-img-top" src="{{product.img3.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img4 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/4"><img class="card-img-top" src="{{product.img4.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img5 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/5"><img class="card-img-top" src="{{product.img5.url}}"></a>
+
+                </div>
+                {% endif %}
+
+                {% if product.img6 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/6"><img class="card-img-top" src="{{product.img6.url}}"></a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-5">
+                <h3>商品名称:{{product.name}}</h3>
+                <h5>售价: ￥{{product.price}}</h5>
+                <p>颜色: {{product.color}}</p>
+                <p>类别: {{product.category}}</p>
+                <p>商品简介: {{product.description}}</p>
+                <form action="/user/shoppingcart/add/{{thisUser.id}}" method="POST">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">选择尺码</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01" name="size">
+                            {% for i in detail %}
+                            <option value="{{i.id}}">{{i.size}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">购入数量</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01" name="quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success">加入购物车</button>
+                </form>
+
+                <div class="card">
+                    <p>预留位置</p>
+                    <p>尺码参考表</p>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <style>
+        #info {
+            float: left;
+        }
+
+        #add {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+
+        #login {
+            color: green;
+        }
+
+        #card {
+            display: inline-block;
+        }
+    </style>
+</body>
+
+</html>

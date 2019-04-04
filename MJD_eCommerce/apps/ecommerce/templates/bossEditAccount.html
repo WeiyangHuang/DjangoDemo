@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>账号管理</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/boss/{{thisBoss.id}}">{{thisBoss.bossName}}: 账号管理 </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/boss/{{thisBoss.id}}"> 老板主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/newProductPage/{{thisBoss.id}}">添加新商品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/orders/{{thisBoss.id}}">待处理订单({{todo}})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/report/{{thisBoss.id}}">财务统计报告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/editAccountPage/{{thisBoss.id}}">编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boss/webadmin/{{thisBoss.id}}">商城管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisBoss.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- 账户密码验证失败信息 -->
+        <ul>
+            {% if messages %}
+            {% for m in messages %}
+            <li>{{m}}</li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <form action="/boss/updateAccount/{{thisBoss.id}}" method="POST">
+                        {% csrf_token %}
+                        <h3 class="card-header">更新账户信息: </h3>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">输入密码</span>
+                            </div>
+                            <input type="password" name="oldPassword" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" placeholder="请先输入现时账户密码后在进行别的操作">
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户姓名</span>
+                            </div>
+                            <input type="text" name="name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{thisBoss.bossName}}">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户账号</span>
+                            </div>
+                            <input type="text" name="account" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" placeholder="{{thisBoss.account}}">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">创建新密码</span>
+                            </div>
+                            <input type="password" name="newPassword" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">确认新密码</span>
+                            </div>
+                            <input type="password" name="password_comfirm" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+
+
+                        <button class="btn btn-info">更新账户信息</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

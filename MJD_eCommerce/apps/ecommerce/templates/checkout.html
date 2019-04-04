@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，结账</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-4">
+                    <h3>结账项数: {{count}}</h3>
+                </div>
+                <div class="col-4">
+                    <h3>商品总数量: {{itemCount}}</h3>
+                </div>
+                <div class="col-4">
+                    <h3>支付总金额: ￥{{total}}</h3>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">名称</th>
+                        <th scope="col">颜色</th>
+                        <th scope="col">尺码</th>
+                        <th scope="col">数量</th>
+                        <th scope="col">单价</th>
+                        <th scope="col">小结</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in cartItem %}
+                    <tr>
+                        <td>{{i.item.product.name}}</td>
+                        <td>{{i.item.product.color}}</td>
+                        <td>{{i.item.size}}</td>
+                        <td>{{i.itemQuantity}}</td>
+                        <td>￥{{i.item.product.price}}</td>
+                        <td>￥{{i.price}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>选择邮寄地址</h4>
+            </div>
+            {% if address %}
+            <form action="/user/paying/{{thisUser.id}}" method="POST">
+                {% csrf_token %}
+                <select class="form-control" name="address">
+                    {% for i in address %}
+                    <option value="{{i.id}}">{{i.country}},{{i.province}},{{i.city}},{{i.street}},{{i.room}},{{i.zipcode}}</option>
+                    {% endfor %}
+                </select>
+
+                <button class="btn btn-success" id="buy">去支付</button>
+            </form>
+            {% else %}
+            <p> 亲，您还未创建邮递地址</p>
+            <form action="/user/myaccount/{{thisUser.id}}" method="GET">
+                <button class="btn btn-success" id="buy">添加邮递地址</button>
+            </form>
+            {% endif %}
+        </div>
+
+
+    </div>
+
+    <style>
+        #buy {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+
+        #login {
+            color: green;
+        }
+
+        #btn {
+            margin-top: 3%;
+        }
+    </style>
+</body>
+
+</html>

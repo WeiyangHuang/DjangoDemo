@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，我的购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-4">
+                    <h3>购物车项数: {{count}}</h3>
+                </div>
+                <div class="col-4">
+                    <h3>商品总数量: {{itemCount}}</h3>
+                </div>
+                <div class="col-4">
+                    <h3>购物车总值: ￥{{total}}</h3>
+                </div>
+
+            </div>
+        </div>
+
+        {% for i in cartItem %}
+        <div class="card">
+            <div class="row">
+                <div class="col-4">
+                    <h4>商品名称: {{i.item.product.name}}</h4>
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{i.item.product.img1.url}}" class="card-img-top">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <br>
+                    <p>商品颜色: {{i.item.product.color}}</p>
+                    <p>购买尺码: {{i.item.size}}</p>
+                    <p>购买数量: {{i.itemQuantity}}</p>
+                    <p>零售价格: ￥{{i.item.product.price}}</p>
+                    <p>小结: ￥{{i.price}}</p>
+                </div>
+                <div class="col-4">
+                    <br>
+                    <button class="btn btn-info" id="btn"><a id="textcolor" href="/user/product/detail/{{i.item.product.id}}/{{thisUser.id}}">商品详情</a></button>
+                    <br>
+                    <button class="btn btn-warning" id="btn"><a id="textcolor" href="/user/product/detail/{{i.item.product.id}}/{{thisUser.id}}">收藏商品</a></button>
+                    <br>
+                    <button class="btn btn-danger" id="btn"><a id="textcolor" href="/user/shoppingcart/remove/{{i.id}}/{{thisUser.id}}">移除商品</a></button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        {% endfor %}
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>注意</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>结账按钮会默认购买购物车内的所有商品</p>
+                        <p>如有商品不需要此次结账，请收藏起来方便下次购买</p>
+                        <p>请从购物车中移除不需要此次结账的商品</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                {% if error %}
+                <ul>
+                    {% for e in error %}
+                    <li>{{e}} 缺货中</li>
+                    {% endfor %}
+                    <li>请联系商家获取更多信息 <a href="/user/service/{{thisUser.id}}">联系我们</a></li>
+                    <li>请从购物车中移除缺货商品</li>
+                    <li>移除缺货商品后结账按钮会重新出现</li>
+                </ul>
+                {% else %}
+                <form action="/user/checkout/{{thisUser.id}}" method="GET">
+                    <button class="btn btn-success" id="buy">我要结账(商品项数:{{count}})</button>
+                </form>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    </div>
+
+    <style>
+        #buy {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+
+        #login {
+            color: green;
+        }
+
+        #btn {
+            margin-top: 3%;
+        }
+    </style>
+</body>
+
+</html>

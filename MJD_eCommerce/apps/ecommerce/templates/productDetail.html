@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，{{product.name}}详情</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h3>商品详情:</h3>
+        <div class="row">
+
+            <div class="col-7">
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/1"><img class="card-img-top" src="{{product.img1.url}}"></a>
+                </div>
+
+                {% if product.img2 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/2"><img class="card-img-top" src="{{product.img2.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img3 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/3"><img class="card-img-top" src="{{product.img3.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img4 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/4"><img class="card-img-top" src="{{product.img4.url}}"></a>
+                </div>
+                {% endif %}
+
+                {% if product.img5 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/5"><img class="card-img-top" src="{{product.img5.url}}"></a>
+
+                </div>
+                {% endif %}
+
+                {% if product.img6 %}
+                <div class="card" id="card" style="width: 18rem;">
+                    <a href="/viewIMG/{{product.id}}/{{thisUser.id}}/6"><img class="card-img-top" src="{{product.img6.url}}"></a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-5">
+                <h3>商品名称:{{product.name}}</h3>
+                <h5>售价: ￥{{product.price}}</h5>
+                <p>颜色: {{product.color}}</p>
+                <p>类别: {{product.category}}</p>
+                <p>商品简介: {{product.description}}</p>
+
+                {% if liked %}
+                <button class="btn btn-danger"><a id="textcolor" href="/user/product/unlike/{{product.id}}/{{thisUser.id}}">取消收藏</a></button>
+                {% else %}
+                <button class="btn btn-warning"><a id="textcolor" href="/user/product/like/{{product.id}}/{{thisUser.id}}">收藏商品</a></button>
+                {% endif %}
+
+                <button class="btn btn-success"><a id="textcolor" href="/user/shoppingPage/{{product.id}}/{{thisUser.id}}">加入购物车</a></button>
+                <br>
+                <br>
+                <h5>货存情况:</h5>
+                <div class="card">
+                    {% for i in size %}
+                    <div class="list-group-item">
+                        <p>尺码 {{i.size}}: {{i.quantity}}件</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+        <h3>您可能会喜欢:</h3>
+        <div class="row">
+            {% if maylike1 %}
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">产品名称: {{maylike1.name}}</h5>
+                        <img src="{{maylike1.img1.url}}" class="card-img-top" width="300" height="200">
+                        <br>
+                        <br>
+                        <button class="btn btn-info" id="info"><a id="textcolor" href="/user/product/detail/{{maylike1.id}}/{{thisUser.id}}">商品详情</a></button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if maylike2 %}
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">产品名称: {{maylike2.name}}</h5>
+                        <img src="{{maylike2.img1.url}}" class="card-img-top" width="300" height="200">
+                        <br>
+                        <br>
+                        <button class="btn btn-info" id="info"><a id="textcolor" href="/user/product/detail/{{maylike2.id}}/{{thisUser.id}}">商品详情</a></button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if maylike3 %}
+            <div class="col-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">产品名称: {{maylike3.name}}</h5>
+                        <img src="{{maylike3.img1.url}}" class="card-img-top" width="300" height="200">
+                        <br>
+                        <br>
+                        <button class="btn btn-info" id="info"><a id="textcolor" href="/user/product/detail/{{maylike3.id}}/{{thisUser.id}}">商品详情</a></button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <style>
+        #textcolor {
+            color: white;
+        }
+
+        #card {
+            display: inline-block;
+        }
+    </style>
+</body>
+
+</html>

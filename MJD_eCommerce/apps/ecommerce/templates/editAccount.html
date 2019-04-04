@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>美嘉达商场</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href=""> {{thisUser.userName}}，编辑账户信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/userHome/{{thisUser.id}}">商城主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myfavorites/{{thisUser.id}}">我的收藏</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/mycart/{{thisUser.id}}">购物车</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/orderInfo/{{thisUser.id}}">订单信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/service/{{thisUser.id}}">联系客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/myaccount/{{thisUser.id}}">编辑个人信息</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/{{thisUser.id}}">登出</a>
+                </li>
+            </ul>
+            <form action="/search" class="form-inline my-2 my-lg-0" method="GET">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" name="search" placeholder="商品名称/类别/颜色">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索商品</button>
+            </form>
+    </nav>
+    <ul>
+        {% if messages %}
+        {% for m in messages %}
+        <li>{{m}}</li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <form action="/user/account/update/{{thisUser.id}}" method="POST">
+                        {% csrf_token %}
+                        <h3 class="card-header">编辑账户信息: </h3>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">当前密码</span>
+                            </div>
+                            <input type="password" name="password" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" placeholder="请输入原密码后再进行操作">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户姓名</span>
+                            </div>
+                            <input type="text" name="name" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{thisUser.userName}}">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户账号</span>
+                            </div>
+                            <input type="text" name="account" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default" placeholder="{{thisUser.account}}">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">用户手机</span>
+                            </div>
+                            <input type="text" name="phone" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{thisUser.phone}}">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">出生日期</span>
+                            </div>
+                            <input type="text" name="year" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{year}}">
+                            <input type="text" name="month" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{month}}">
+                            <input type="text" name="day" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                placeholder="{{day}}">
+
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">创建新密码</span>
+                            </div>
+                            <input type="password" name="newPassword" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">确认新密码</span>
+                            </div>
+                            <input type="password" name="password_comfirm" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <button class="btn btn-info">更新用户信息</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <h3 class="card-header">添加邮递地址: </h3>
+                    <form action="/user/account/add/address/{{thisUser.id}}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">国家</span>
+                            </div>
+                            <input type="text" name="country" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">省份</span>
+                            </div>
+                            <input type="text" name="province" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">城市</span>
+                            </div>
+                            <input type="text" name="city" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">街道</span>
+                            </div>
+                            <input type="text" name="street" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">房号</span>
+                            </div>
+                            <input type="text" name="room" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">邮编</span>
+                            </div>
+                            <input type="text" name="zipcode" class="form-control" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <button class="btn btn-info">添加地址</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class='col-12'>
+                <h3>已创建地址:</h3>
+                {% if not address %}
+                <p>您暂时还未添加任何邮递地址</p>
+                {% endif %}
+                {% for i in address %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                <p>{{i.country}}</p>
+                                <p>{{i.province}}, {{i.city}}</p>
+                                <p>{{i.street}}, {{i.room}}, {{i.zipcode}}</p>
+                            </div>
+                            <div class="col-4">
+                                <br>
+                                <br>
+                                <button class="btn btn-danger" id="delete"><a id="textcolor" href="/user/account/delete/address/{{i.id}}/{{thisUser.id}}">删除地址</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        #delete {
+            float: right;
+        }
+
+        #textcolor {
+            color: white;
+        }
+    </style>
+</body>
+
+</html>
